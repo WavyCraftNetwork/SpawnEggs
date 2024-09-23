@@ -19,7 +19,7 @@ use pocketmine\data\bedrock\item\SavedItemData;
 use pocketmine\world\format\io\GlobalItemDataHandlers;
 
 use wavycraft\spawnegg\items\EVanillaItems;
-use wavycraft\spawnegg\entities\mobs\{Cow, Creeper, EnderMan, Pig, Skeleton, Spider, Witch};
+use wavycraft\spawnegg\entities\mobs\{Cow, Creeper, EnderMan, Pig, Skeleton, Spider, Witch, Sheep};
 
 class Loader extends PluginBase {
 
@@ -38,7 +38,8 @@ class Loader extends PluginBase {
             "Pig" => Pig::class,
             "Skeleton" => Skeleton::class,
             "Spider" => Spider::class,
-            "Witch" => Witch::class
+            "Witch" => Witch::class,
+            "Sheep" => Sheep::class
         ];
         foreach ($entities as $entityName => $typeClass) {
             EntityFactory::getInstance()->register($typeClass, static function (World $world, CompoundTag $nbt) use ($entityName): Living {
@@ -60,6 +61,7 @@ class Loader extends PluginBase {
         $skeleton_egg = EVanillaItems::SKELETON_SPAWN_EGG();
         $spider_egg = EVanillaItems::SPIDER_SPAWN_EGG();
         $enderman_egg = EVanillaItems::ENDERMAN_SPAWN_EGG();
+        $sheep_egg = EVanillaItems::SHEEP_SPAWN_EGG();
 
         $itemDeserializer->map(
             ItemTypeNames::PIG_SPAWN_EGG,
@@ -94,6 +96,11 @@ class Loader extends PluginBase {
         $itemDeserializer->map(
             ItemTypeNames::ENDERMAN_SPAWN_EGG,
             static fn() => clone $enderman_egg
+        );
+
+        $itemDeserializer->map(
+            ItemTypeNames::SHEEP_SPAWN_EGG,
+            static fn() => clone $sheep_egg
         );
 
         $itemSerializer->map(
@@ -131,6 +138,11 @@ class Loader extends PluginBase {
             static fn() => new SavedItemData(ItemTypeNames::ENDERMAN_SPAWN_EGG)
         );
 
+        $itemSerializer->map(
+            $sheep_egg,
+            static fn() => new SavedItemData(ItemTypeNames::SHEEP_SPAWN_EGG)
+        );
+
         $stringToItemParser->register(
             "pig_spawn_egg",
             static fn() => clone $pig_egg
@@ -166,6 +178,11 @@ class Loader extends PluginBase {
             static fn() => clone $enderman_egg
         );
 
+        $stringToItemParser->register(
+            "sheep_spawn_egg",
+            static fn() => clone $sheep_egg
+        );
+
         $creativeInventory->add($pig_egg);
         $creativeInventory->add($cow_egg);
         $creativeInventory->add($creeper_egg);
@@ -173,6 +190,7 @@ class Loader extends PluginBase {
         $creativeInventory->add($skeleton_egg);
         $creativeInventory->add($spider_egg);
         $creativeInventory->add($enderman_egg);
+        $creativeInventory->add($sheep_egg);
     }
 
     public static function getInstance(): self
