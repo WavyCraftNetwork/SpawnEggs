@@ -102,5 +102,11 @@ class EVanillaItems
 				return new Witch(Location::fromObject($pos, $world, $yaw, $pitch));
 			}
 		});
+
+	        self::register("sheep_spawn_egg", new class(new ItemIdentifier(ItemTypeIds::newId()), "Sheep Spawn Egg") extends SpawnEgg{
+			public function createEntity(World $world, Vector3 $pos, float $yaw, float $pitch) : Entity{
+				return new Sheep(Location::fromObject($pos, $world, $yaw, $pitch));
+			}
+		});
 	}
 }
